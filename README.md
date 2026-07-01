@@ -134,7 +134,4 @@ This backend follows a few core principles:
 - Cloudinary stores media assets.
 - External APIs are handled by the backend.
 
-
-# License
-
-This project is licensed under the MIT License.
+NOTE: This repository is publicly accessible for transparency, portfolio, educational, and evaluation purposes only not for public use.

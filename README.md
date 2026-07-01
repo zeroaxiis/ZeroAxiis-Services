@@ -1,36 +1,164 @@
-# ZeroAxiis Services
+<div align="center">
 
-This repository contains the backend services for ZeroAxiis, written in Go using the Gin framework. It is configured to run with MongoDB and Redis.
+# ZeroAxiis Backend
 
-## Prerequisites
+A production-ready backend powering the **ZeroAxiis** website — Built with **Go**, **Gin**, **MongoDB**, **Redis**, **JWT**, **Docker**, and **Cloudinary**.
 
-- Go 1.25 or higher
-- Docker and Docker Compose (optional, for containerized run)
+</div>
 
-## Setup and Running
 
-### Run Locally
+## About
 
-1. Install dependencies:
-   ```bash
-   go mod tidy
-   ```
+ZeroAxiis Backend is the official API responsible for serving dynamic content to the ZeroAxiis website.
 
-2. Run the application:
-   ```bash
-   go run cmd/api/main.go
-   ```
+The backend follows a layered architecture and is designed with scalability, maintainability, and clean code principles in mind.
 
-The API will be available at `http://localhost:8080`.
+The frontend consumes this API to display:
 
-### Run with Docker Compose
+- Team Members
+- Client Projects
+- Open Source Projects
+- Creative Videos
+- Blogs
+- Testimonials
 
-1. Start all services (Backend API, MongoDB, and Redis):
-   ```bash
-   docker compose up --build
-   ```
 
-2. To stop the containers:
-   ```bash
-   docker compose down
-   ```
+# Features
+
+### Authentication
+
+- JWT Authentication
+- bcrypt Password Hashing
+- Redis Session Management
+- 15-Minute Inactivity Logout
+- Manual Admin Creation (No Public Registration)
+
+### Content Management
+
+- Team Management
+- Client Projects
+- Open Source Projects
+- Creative Videos
+- Blogs
+- Testimonials
+
+### Storage
+
+- MongoDB
+- Redis
+- Cloudinary
+
+### Integrations
+
+- GitHub Repository Metadata
+- YouTube Video Metadata
+
+### Infrastructure
+
+- Docker
+- Docker Compose
+- Layered Architecture
+- Repository Pattern
+
+
+# Tech Stack
+
+| Category | Technology |
+|-----------|------------|
+| Language | Go |
+| Framework | Gin |
+| Database | MongoDB |
+| Cache | Redis |
+| Authentication | JWT + bcrypt |
+| Image Storage | Cloudinary |
+| Containerization | Docker |
+| Version Control | Git |
+
+
+# Project Structure
+
+```text
+zeroaxiis-backend/
+
+├── cmd/
+├── internal/
+├── configs/
+├── docs/
+├── Dockerfile
+├── docker-compose.yml
+├── Makefile
+├── go.mod
+└── go.sum
+```
+
+
+# Documentation
+
+Detailed documentation is available inside the **docs/** directory.
+
+| File | Description |
+|------|-------------|
+| architecture.md | Backend architecture and request flow |
+| api.md | API endpoints |
+| models.md | MongoDB models |
+| development.md | Development guide |
+| decisions.md | Architectural decisions |
+
+
+# Running Locally
+
+## Clone
+
+```bash
+git clone https://github.com/your-username/zeroaxiis-backend.git
+
+cd zeroaxiis-backend
+```
+
+## Environment
+
+Create
+
+```text
+.env
+```
+
+using
+
+```text
+.env.example
+```
+
+
+## Run
+
+```bash
+docker compose up --build
+```
+
+
+# Development Status
+
+Current Phase
+
+```
+Planning & Architecture
+```
+
+
+# Design Principles
+
+This backend follows a few core principles:
+
+- Backend is the single source of truth.
+- Public users have read-only access.
+- Only authenticated administrators can modify data.
+- Redis is used for sessions and caching.
+- MongoDB stores persistent business data.
+- Cloudinary stores media assets.
+- External APIs are handled by the backend.
+
+
+# License
+
+This project is licensed under the MIT License.

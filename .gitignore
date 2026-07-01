@@ -36,7 +36,6 @@ tmp/
 *.env
 *.env.local
 .env.backup
-.env.sampl
 config.local.yaml
 config.local.json
 config.local.ini

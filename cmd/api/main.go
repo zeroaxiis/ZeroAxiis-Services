@@ -24,7 +24,14 @@ func main() {
 
 	// Routes- grouping
 	api := router.Group("/api/v1")
-	
+
+	//redis connection heheheh
+	redisClient , err := database.ConnectRedis(cfg.RedisURI)
+
+	if err!=nil {
+		log.Fatal(err)
+	}
+	_= redisClient
 	routes.TestRoutes(api)
 	// Start Server
 	err = router.Run(":" + cfg.Port)

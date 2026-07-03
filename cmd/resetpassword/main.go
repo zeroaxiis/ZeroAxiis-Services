@@ -1,1 +1,1 @@
-package restpassword
+package resetpassword

@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
-var Client *mongo.Client
+var MongoClient *mongo.Client
 
 func ConnectMongo(uri string) (*mongo.Client, error){
 	ctx ,cancel := context.WithTimeout(context.Background(),10*time.Second)
@@ -25,7 +25,7 @@ func ConnectMongo(uri string) (*mongo.Client, error){
 		return nil ,err
 	}
 
-	Client = client
+	MongoClient = client
 	utils.Log.Info("MongoDB Server is Connected")
-	return client ,nil
+	return MongoClient ,nil
 }

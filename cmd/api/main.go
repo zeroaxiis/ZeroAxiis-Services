@@ -56,6 +56,7 @@ func main() {
 
 	//routes
 	routes.TestRoutes(api)
+	routes.HealthRoutes(api)
 
 
 	// Start Server

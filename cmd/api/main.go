@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-
 	"github.com/gin-gonic/gin"
 	"github.com/zeroaxiis/ZeroAxiis-Services/internal/config"
 	"github.com/zeroaxiis/ZeroAxiis-Services/internal/database"
@@ -36,11 +35,11 @@ func main() {
 	router := gin.Default()
 
 	
-	//cors setup
+	//middleware
 	router.Use(middleware.CORS(cfg.AdminFrontend, cfg.PublicFrontend))
 	//security header hehehe
 	router.Use(middleware.SecurityHeaders())
-
+	router.Use(middleware.JSONBodyLimit(16 * 1024 )) // 16kb
 
 	// Routes- grouping
 	api := router.Group("/api/v1")

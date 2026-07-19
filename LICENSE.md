@@ -20,4 +20,4 @@ Contribution rights are restricted to authorized members
 of the ZeroAxiis organization.
 
 For licensing inquiries, contact:
-support.zeroaxiis@gmail.com
+support@zeroaxiis.tech

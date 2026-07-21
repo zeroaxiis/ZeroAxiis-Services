@@ -48,6 +48,12 @@ func main() {
 		utils.Log.Fatal("Failed to read email", zap.Error(err))
 	}
 
+	fmt.Print("Enter Name: ")
+	name, err := reader.ReadString('\n')
+	if err != nil {
+		utils.Log.Fatal("Failed to read name", zap.Error(err))
+	}
+
 	fmt.Print("Enter Password: ")
 	password, err := reader.ReadString('\n')
 	if err != nil {
@@ -55,6 +61,7 @@ func main() {
 	}
 
 	email = strings.TrimSpace(email)
+	name = strings.TrimSpace(name)
 	password = strings.TrimSpace(password)
 
 	adminCollection := client.Database("zeroaxiiscom").Collection("admin")
@@ -86,6 +93,7 @@ func main() {
 	}
 
 	admin = models.Admin{
+		Name:     name,
 		Email:    email,
 		Password: hashedPassword,
 	}
@@ -95,8 +103,11 @@ func main() {
 		admin,
 	)
 	if err != nil {
-		utils.Log.Fatal("Failed to Create Admin", zap.Error(err))
+		utils.Log.Fatal("Failed to create admin", zap.Error(err))
 	}
-	utils.Log.Info("Admin Created Successfully...!", zap.Any("id", finalResult.InsertedID))
 
+	utils.Log.Info(
+		"Admin Created Successfully...!",
+		zap.Any("id", finalResult.InsertedID),
+	)
 }

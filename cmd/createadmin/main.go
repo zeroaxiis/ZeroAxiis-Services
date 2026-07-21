@@ -38,9 +38,11 @@ func main() {
 		}
 	}()
 
-	reader := bufio.NewReader(os.Stdin)
+	fmt.Println("=====================================")
+	fmt.Println("==== ZeroAxiis Create Admin CLI ====")
+	fmt.Println("=====================================")
 
-	fmt.Println("=== ZeroAxiis Admin Creator ===")
+	reader := bufio.NewReader(os.Stdin)
 
 	fmt.Print("Enter Email: ")
 	email, err := reader.ReadString('\n')

@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes(api *gin.RouterGroup){
+func SetupRoutes(api *gin.RouterGroup) {
 	TestRoutes(api)
 	HealthRoutes(api)
+	AuthRoutes(api)
 }
-

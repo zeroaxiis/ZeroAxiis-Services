@@ -82,7 +82,7 @@ func main() {
 		utils.Log.Fatal("Failed to hash password")
 	}
 
-	updateResult, err := adminCollection.UpdateOne(
+	_, err = adminCollection.UpdateOne(
 		context.Background(),
 		bson.M{
 			"email": email,
@@ -101,8 +101,6 @@ func main() {
 
 	utils.Log.Info(
 		"Password Reset Successfully",
-		zap.Int64("Matched", updateResult.MatchedCount),
-		zap.Int64("modified", updateResult.ModifiedCount),
 	)
 
 }

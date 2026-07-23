@@ -12,6 +12,7 @@ import (
 	"github.com/zeroaxiis/ZeroAxiis-Services/internal/config"
 	"github.com/zeroaxiis/ZeroAxiis-Services/internal/database"
 	"github.com/zeroaxiis/ZeroAxiis-Services/internal/models"
+	"github.com/zeroaxiis/ZeroAxiis-Services/internal/pkg"
 	"github.com/zeroaxiis/ZeroAxiis-Services/internal/utils"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
@@ -21,20 +22,20 @@ import (
 func main() {
 	cfg := config.MustLoad()
 
-	err := utils.Init(cfg.AppEnv)
+	err := pkg.Init(cfg.AppEnv)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer utils.Log.Sync()
+	defer pkg.Log.Sync()
 
 	client, err := database.ConnectMongo(cfg.MongoURI)
 	if err != nil {
-		utils.Log.Fatal("Failed to connect to MongoDB", zap.Error(err))
+		pkg.Log.Fatal("Failed to connect to MongoDB", zap.Error(err))
 	}
 
 	defer func() {
 		if err := client.Disconnect(context.Background()); err != nil {
-			utils.Log.Error("Failed to disconnect MongoDB", zap.Error(err))
+			pkg.Log.Error("Failed to disconnect MongoDB", zap.Error(err))
 		}
 	}()
 
@@ -47,19 +48,19 @@ func main() {
 	fmt.Print("Enter Email: ")
 	email, err := reader.ReadString('\n')
 	if err != nil {
-		utils.Log.Fatal("Failed to read email", zap.Error(err))
+		pkg.Log.Fatal("Failed to read email", zap.Error(err))
 	}
 
 	fmt.Print("Enter Name: ")
 	name, err := reader.ReadString('\n')
 	if err != nil {
-		utils.Log.Fatal("Failed to read name", zap.Error(err))
+		pkg.Log.Fatal("Failed to read name", zap.Error(err))
 	}
 
 	fmt.Print("Enter Password: ")
 	password, err := reader.ReadString('\n')
 	if err != nil {
-		utils.Log.Fatal("Failed to read password", zap.Error(err))
+		pkg.Log.Fatal("Failed to read password", zap.Error(err))
 	}
 
 	email = strings.TrimSpace(email)
@@ -80,18 +81,18 @@ func main() {
 	err = result.Decode(&admin)
 
 	if err == nil {
-		utils.Log.Fatal("Admin already exists")
+		pkg.Log.Fatal("Admin already exists")
 	}
 
 	if errors.Is(err, mongo.ErrNoDocuments) {
-		utils.Log.Info("No existing admin found")
+		pkg.Log.Info("No existing admin found")
 	} else {
-		utils.Log.Fatal("Failed to check existing admin", zap.Error(err))
+		pkg.Log.Fatal("Failed to check existing admin", zap.Error(err))
 	}
 
 	hashedPassword, err := utils.HashPassword(password)
 	if err != nil {
-		utils.Log.Fatal("Failed to hash password", zap.Error(err))
+		pkg.Log.Fatal("Failed to hash password", zap.Error(err))
 	}
 
 	admin = models.Admin{
@@ -105,10 +106,10 @@ func main() {
 		admin,
 	)
 	if err != nil {
-		utils.Log.Fatal("Failed to create admin", zap.Error(err))
+		pkg.Log.Fatal("Failed to create admin", zap.Error(err))
 	}
 
-	utils.Log.Info(
+	pkg.Log.Info(
 		"Admin Created Successfully...!",
 		zap.Any("id", finalResult.InsertedID),
 	)

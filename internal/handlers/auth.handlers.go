@@ -6,8 +6,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/zeroaxiis/ZeroAxiis-Services/internal/config"
 	"github.com/zeroaxiis/ZeroAxiis-Services/internal/database"
 	"github.com/zeroaxiis/ZeroAxiis-Services/internal/models"
+	"github.com/zeroaxiis/ZeroAxiis-Services/internal/pkg"
 	"github.com/zeroaxiis/ZeroAxiis-Services/internal/utils"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
@@ -17,10 +19,10 @@ import (
 func Login(c *gin.Context) {
 
 	var request models.LoginRequest
-
+	cfg := config.MustLoad()
 	err := c.ShouldBindJSON(&request)
 	if err != nil {
-		utils.Log.Warn(
+		pkg.Log.Warn(
 			"Invalid Login Request",
 			zap.Error(err),
 		)
@@ -42,7 +44,7 @@ func Login(c *gin.Context) {
 	).Decode(&admin)
 
 	if errors.Is(err, mongo.ErrNoDocuments) {
-		utils.Log.Warn(
+		pkg.Log.Warn(
 			"login Failed: admin not found",
 			zap.String("email", request.Email),
 		)
@@ -53,7 +55,7 @@ func Login(c *gin.Context) {
 		return
 	}
 	if err != nil {
-		utils.Log.Error("failed to find admin", zap.Error(err))
+		pkg.Log.Error("failed to find admin", zap.Error(err))
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
 			"message": "Internal Server Error",
@@ -63,7 +65,7 @@ func Login(c *gin.Context) {
 
 	err = utils.CheckPassword(admin.Password, request.Password)
 	if err != nil {
-		utils.Log.Warn(
+		pkg.Log.Warn(
 			"login Failed Invalid Password",
 			zap.String("email", request.Email),
 		)
@@ -73,9 +75,48 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
+	sessionID, err := utils.CreateSession(admin.ID.Hex())
+	if err != nil {
+		pkg.Log.Error(
+			"Failed to create session",
+			zap.Error(err),
+		)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Internal Server Error",
+		})
+		return
+	}
+	token, err := utils.GenerateJWT(
+		admin.ID.Hex(),
+		sessionID,
+		cfg.JWTSecret,
+	)
+	if err != nil {
+		pkg.Log.Error(
+			"Failed to generate JWT",
+			zap.String("email", request.Email),
+			zap.Error(err),
+		)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Internal Server Error",
+		})
+		return
+	}
+
+	c.SetCookie(
+		"token",
+		token,
+		15*60,
+		"/",
+		"",
+		false,
+		true,
+	)
 	c.JSON(http.StatusOK, gin.H{
-		"success":true,
-		"message":"Login Successful",
+		"success": true,
+		"message": "Login Successful",
 	})
 
 }

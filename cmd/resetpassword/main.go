@@ -13,6 +13,7 @@ import (
 	"github.com/zeroaxiis/ZeroAxiis-Services/internal/config"
 	"github.com/zeroaxiis/ZeroAxiis-Services/internal/database"
 	"github.com/zeroaxiis/ZeroAxiis-Services/internal/models"
+	"github.com/zeroaxiis/ZeroAxiis-Services/internal/pkg"
 	"github.com/zeroaxiis/ZeroAxiis-Services/internal/utils"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
@@ -22,19 +23,19 @@ import (
 func main() {
 
 	cfg := config.MustLoad()
-	err := utils.Init(cfg.AppEnv)
+	err := pkg.Init(cfg.AppEnv)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer utils.Log.Sync()
+	defer pkg.Log.Sync()
 
 	client, err := database.ConnectMongo(cfg.MongoURI)
 	if err != nil {
-		utils.Log.Fatal("Failed to Connect to MongoDB", zap.Error(err))
+		pkg.Log.Fatal("Failed to Connect to MongoDB", zap.Error(err))
 	}
 	defer func() {
 		if err := client.Disconnect(context.Background()); err != nil {
-			utils.Log.Error("Failed to Disconnect MongoDB", zap.Error(err))
+			pkg.Log.Error("Failed to Disconnect MongoDB", zap.Error(err))
 		}
 	}()
 
@@ -47,14 +48,14 @@ func main() {
 	fmt.Print("Enter Email: ")
 	email, err := reader.ReadString('\n')
 	if err != nil {
-		utils.Log.Fatal("Failed to Read Email", zap.Error(err))
+		pkg.Log.Fatal("Failed to Read Email", zap.Error(err))
 	}
 
 	fmt.Print("Enter New Password: ")
 	password, err := reader.ReadString('\n')
 
 	if err != nil {
-		utils.Log.Fatal("Failed to Read Password", zap.Error(err))
+		pkg.Log.Fatal("Failed to Read Password", zap.Error(err))
 	}
 
 	email = strings.TrimSpace(email)
@@ -70,16 +71,16 @@ func main() {
 		},
 	)
 	if errors.Is(err, mongo.ErrNoDocuments) {
-		utils.Log.Fatal("Admin not Found")
+		pkg.Log.Fatal("Admin not Found")
 	}
 	err = result.Decode(&admin)
 	if err != nil {
-		utils.Log.Fatal("Failed to find Admin", zap.Error(err))
+		pkg.Log.Fatal("Failed to find Admin", zap.Error(err))
 	}
-	utils.Log.Info("Admin Found Successfully...!")
+	pkg.Log.Info("Admin Found Successfully...!")
 	hashedPassword, err := utils.HashPassword(password)
 	if err != nil {
-		utils.Log.Fatal("Failed to hash password")
+		pkg.Log.Fatal("Failed to hash password")
 	}
 
 	_, err = adminCollection.UpdateOne(
@@ -96,10 +97,10 @@ func main() {
 	)
 
 	if err != nil {
-		utils.Log.Fatal("Failed to Update Password", zap.Error(err))
+		pkg.Log.Fatal("Failed to Update Password", zap.Error(err))
 	}
 
-	utils.Log.Info(
+	pkg.Log.Info(
 		"Password Reset Successfully",
 	)
 

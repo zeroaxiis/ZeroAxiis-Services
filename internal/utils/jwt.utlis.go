@@ -2,24 +2,23 @@ package utils
 
 import (
 	"time"
+
 	"github.com/golang-jwt/jwt/v5"
 )
 
 const jwtExpiration = 15 * time.Minute
 
-
-// this will ensure that the jwt is in valid structure 
+// this will ensure that the jwt is in valid structure
 type JWTClaims struct {
-	AdminID  string `json:"admin_id"`
+	AdminID   string `json:"admin_id"`
 	SessionID string `json:"session_id"`
 	jwt.RegisteredClaims
 }
 
-
-// token generation 
+// token generation
 func GenerateJWT(adminID, sessionID, secret string) (string, error) {
 	claims := JWTClaims{
-		AdminID:  adminID,
+		AdminID:   adminID,
 		SessionID: sessionID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(
@@ -39,8 +38,7 @@ func GenerateJWT(adminID, sessionID, secret string) (string, error) {
 	return token.SignedString([]byte(secret))
 }
 
-
-//token verification
+// token verification
 func VerifyJWT(tokenString, secret string) (*JWTClaims, error) {
 	claims := &JWTClaims{}
 

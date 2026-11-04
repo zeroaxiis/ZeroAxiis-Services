@@ -8,17 +8,18 @@ import (
 )
 
 type Config struct {
-	Port                string
-	MongoURI            string
-	RedisURI            string
-	JWTSecret           string
-	CloudinaryCloudName string
-	CloudinaryAPIKey    string
-	CloudinaryAPISecret string
-	AppEnv              string
-	PublicFrontend      string
-	AdminFrontend       string
-	YouTubeAPIKey       string
+	Port                  string
+	MongoURI              string
+	RedisURI              string
+	JWTSecret             string
+	CloudinaryCloudName   string
+	CloudinaryAPIKey      string
+	CloudinaryAPISecret   string
+	AppEnv                string
+	PublicFrontend        string
+	AdminFrontend         string
+	YouTubeAPIKey         string
+	HalomailWebhookSecret string
 }
 
 func Load() (*Config, error) {
@@ -27,17 +28,18 @@ func Load() (*Config, error) {
 
 	//creating a pointer to Config
 	cfg := &Config{
-		Port:                os.Getenv("PORT"),
-		MongoURI:            os.Getenv("MONGO_URI"),
-		RedisURI:            os.Getenv("REDIS_URI"),
-		JWTSecret:           os.Getenv("JWT_SECRET"),
-		CloudinaryCloudName: os.Getenv("CLOUDINARY_CLOUD_NAME"),
-		CloudinaryAPIKey:    os.Getenv("CLOUDINARY_API_KEY"),
-		CloudinaryAPISecret: os.Getenv("CLOUDINARY_API_SECRET"),
-		AppEnv:              os.Getenv("APP_ENV"),
-		PublicFrontend:      os.Getenv("PUBLIC_FRONTEND"),
-		AdminFrontend:       os.Getenv("ADMIN_FRONTEND"),
-		YouTubeAPIKey:       os.Getenv("YouTubeAPIKey"),
+		Port:                  os.Getenv("PORT"),
+		MongoURI:              os.Getenv("MONGO_URI"),
+		RedisURI:              os.Getenv("REDIS_URI"),
+		JWTSecret:             os.Getenv("JWT_SECRET"),
+		CloudinaryCloudName:   os.Getenv("CLOUDINARY_CLOUD_NAME"),
+		CloudinaryAPIKey:      os.Getenv("CLOUDINARY_API_KEY"),
+		CloudinaryAPISecret:   os.Getenv("CLOUDINARY_API_SECRET"),
+		AppEnv:                os.Getenv("APP_ENV"),
+		PublicFrontend:        os.Getenv("PUBLIC_FRONTEND"),
+		AdminFrontend:         os.Getenv("ADMIN_FRONTEND"),
+		YouTubeAPIKey:         os.Getenv("YouTubeAPIKey"),
+		HalomailWebhookSecret: os.Getenv("HALOMAIL_WEBHOOK_SECRET"), 
 	}
 
 	if err := cfg.validate(); err != nil {
@@ -90,6 +92,9 @@ func (c *Config) validate() error {
 		return errors.New("Admin Frontend url is needed for Data Management")
 	case c.YouTubeAPIKey == "":
 		return errors.New("YouTube API Key is Required")
+	case c.HalomailWebhookSecret == "":
+		return errors.New("Halomail webhook secert is missing")
 	}
+	
 	return nil
 }

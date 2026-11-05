@@ -13,4 +13,5 @@ func SetupRoutes(api *gin.RouterGroup) {
 	BlogRoutes(api)
 	CreativeRoutes(api)
 	ProjectRoutes(api)
+	HaloMailRoutes(api)
 }

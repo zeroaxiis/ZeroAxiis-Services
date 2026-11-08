@@ -136,9 +136,13 @@ func GetHaloMailEvents(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, models.HaloMailEventsResponse{
 			Success: false,
 			Count:   0,
-			Data:    nil,
+			Data:    []models.HaloMailEvent{},
 		})
 		return
+	}
+
+	if events == nil {
+		events = []models.HaloMailEvent{}
 	}
 
 	// Return typed Response Struct with count and array

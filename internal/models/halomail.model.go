@@ -7,12 +7,12 @@ import (
 )
 
 
-type HaloMailEvent struct{
-	ID bson.ObjectID `bson:"_id, omitempty" json:"id"`
-	Event string `bson:"event" json:"event"`
-	Timestamp string `bson:"timestamp" json:"timestamp"`
-	Data map[string] interface{} `bson:"data" json:"data"`
-	ReceivedAt time.Time `bson:"received_at" json:"received_at"`
+type HaloMailEvent struct {
+	ID         bson.ObjectID          `bson:"_id,omitempty" json:"id"`
+	Event      string                 `bson:"event" json:"event"`
+	Timestamp  string                 `bson:"timestamp" json:"timestamp"`
+	Data       map[string]interface{} `bson:"data" json:"data"`
+	ReceivedAt time.Time              `bson:"received_at" json:"received_at"`
 }
 
 type HalomailWebhookRequest struct{
